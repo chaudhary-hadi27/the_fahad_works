@@ -1,8 +1,14 @@
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
-  /* config options here */
+// next.config.ts
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   reactStrictMode: true,
+  images: {
+    domains: [
+      'picsum.photos',      // if you still use it
+      'randomuser.me',      // for your testimonial avatars
+      // add any other hosts here
+    ],
+  },
 };
 
-export default nextConfig;
+module.exports = nextConfig;
