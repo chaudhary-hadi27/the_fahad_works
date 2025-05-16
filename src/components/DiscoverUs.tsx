@@ -16,10 +16,10 @@ const DiscoverUs = () => {
           Discover Us
         </h2>
         <p className="text-gray-400 text-base sm:text-lg md:text-xl leading-relaxed">
-          At <strong>the_fahad_works</strong>, we’re driven by pure passion and technical mastery. Our team thrives on building powerful digital experiences that blend intelligence, performance, and creativity.
+          At <strong>the_fahad_works</strong>, we&rsquo;re driven by pure passion and technical mastery. Our team thrives on building powerful digital experiences that blend intelligence, performance, and creativity.
         </p>
         <p className="text-gray-400 text-base sm:text-lg md:text-xl leading-relaxed mt-4">
-          Whether it's developing advanced AI & Automation systems, crafting responsive Next.js web applications, or designing captivating brand visuals — we aim for nothing less than excellence.
+          Whether it&rsquo;s developing advanced AI &amp; Automation systems, crafting responsive Next.js web applications, or designing captivating brand visuals — we aim for nothing less than excellence.
         </p>
         <p className="text-gray-400 text-base sm:text-lg md:text-xl leading-relaxed mt-6">
           We specialize in <strong>Custom GenAI, LLMs, seamless AI integrations, and deep learning pipelines</strong>, scaling intelligent systems that evolve with your business.
@@ -31,7 +31,7 @@ const DiscoverUs = () => {
           Beyond tech, we offer solid support in <strong>data automation, creative design, digital marketing</strong>, and <strong>24/7 client support</strong> — empowering brands to stay ahead in a competitive digital landscape.
         </p>
         <p className="text-gray-400 text-base sm:text-lg md:text-xl leading-relaxed mt-6">
-          Every project we take on is guided by innovation, dedication, and a strong focus on delivering measurable results. Let's build something exceptional — together.
+          Every project we take on is guided by innovation, dedication, and a strong focus on delivering measurable results. Let&rsquo;s build something exceptional — together.
         </p>
       </motion.div>
     </section>

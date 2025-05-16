@@ -66,7 +66,7 @@ export default function Testimonials() {
               className="mx-auto rounded-full mb-4"
             />
             <p className="italic text-gray-300 mb-4">
-              "{testimonials[current].text}"
+              &quot;{testimonials[current].text}&quot;
             </p>
             <h4 className="text-xl font-semibold">
               {testimonials[current].name}
