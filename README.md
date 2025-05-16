@@ -23,7 +23,10 @@ Welcome to **the\_fahad\_works**, a modern, responsive, and animated website bui
 
 ## Demo
 
-A live demo can be accessed at: [the-fahad-works.vercel.app](https://the-fahad-works.vercel.app/)
+A live demo can be accessed at: 
+<a href="https://the-fahad-works.vercel.app/" target="_blank" rel="noopener noreferrer">
+  the-fahad-works.vercel.app
+</a>
 
 ---
 
