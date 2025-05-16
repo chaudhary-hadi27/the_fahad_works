@@ -23,10 +23,9 @@ Welcome to **the\_fahad\_works**, a modern, responsive, and animated website bui
 
 ## Demo
 
-A live demo can be accessed at: 
-<a href="https://the-fahad-works.vercel.app/" target="_blank" rel="noopener noreferrer">
-  the-fahad-works.vercel.app
-</a>
+A live demo can be accessed at: [the-fahad-works.vercel.app](https://the-fahad-works.vercel.app/)  
+_Tip: Ctrl/Cmd‑click or right‑click the link and choose “Open link in new tab” to keep this page open._
+
 
 ---
 
