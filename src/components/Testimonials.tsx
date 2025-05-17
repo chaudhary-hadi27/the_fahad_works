@@ -13,17 +13,17 @@ const testimonials = [
   {
     name: 'Jane Doe',
     text: 'They transformed our data pipeline efficiently.',
-    img: 'https://randomuser.me/api/portraits/women/44.jpg'
+    img: '/client1.jpg'
   },
   {
     name: 'John Smith',
     text: 'Their AI solutions boosted our productivity by 30%.',
-    img: 'https://randomuser.me/api/portraits/men/46.jpg'
+    img: '/client2.jpg'
   },
   {
     name: 'Emily Johnson',
     text: 'Professional web development services with great support.',
-    img: 'https://randomuser.me/api/portraits/women/47.jpg'
+    img: '/client3.jpg'
   }
 ];
 
