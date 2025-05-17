@@ -17,7 +17,6 @@ export default function Nav() {
   useEffect(() => {
     if (!menuOpen) return;
     setTimeout(() => {
-      // narrow the type before using querySelector
       const container = menuRef.current;
       if (!container) return;
       const firstFocusable = container.querySelector<HTMLAnchorElement | HTMLButtonElement>('a, button');
@@ -60,9 +59,10 @@ export default function Nav() {
           </button>
         </motion.div>
       ) : (
-        <div
+        <motion.div
           ref={menuRef}
-          className="fixed inset-0 bg-gray-900 bg-opacity-95 flex flex-col items-center justify-center space-y-6 pointer-events-auto"
+          className="fixed inset-0 flex flex-col items-center justify-center space-y-6 pointer-events-auto"
+          style={{ backgroundColor: background }}
         >
           <button
             className="absolute top-5 right-5 text-white text-4xl focus:outline-none"
@@ -81,7 +81,7 @@ export default function Nav() {
               {item}
             </a>
           ))}
-        </div>
+        </motion.div>
       )}
     </nav>
   );
