@@ -1,4 +1,3 @@
-// components/Nav.tsx
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
@@ -11,12 +10,8 @@ export default function Nav() {
   const [menuOpen, setMenuOpen] = useState(false);
   const { scrollY } = useScroll();
 
-  // Scroll-based transforms for desktop navbar:
-  const background = useTransform(
-    scrollY,
-    [0, 50],
-    ['transparent', 'rgba(17,24,39,0.95)']
-  );
+  // Scroll-based transforms for desktop navbar
+  const background = useTransform(scrollY, [0, 50], ['transparent', 'rgba(17,24,39,0.95)']);
   const padding = useTransform(scrollY, [0, 50], ['1rem', '0.5rem']);
   const borderColor = useTransform(
     scrollY,
@@ -24,14 +19,12 @@ export default function Nav() {
     ['rgba(255,255,255,0)', 'rgba(255,255,255,0.7)']
   );
 
-  // Refs for focus management
+  // Focus management for accessibility
   const menuRef = useRef<HTMLDivElement>(null);
   const hamburgerRef = useRef<HTMLButtonElement>(null);
 
-  // Focus first link when opening; return focus to hamburger when closing
   useEffect(() => {
     if (menuOpen) {
-      // Opened: focus first link/button inside menu
       setTimeout(() => {
         const container = menuRef.current;
         if (!container) return;
@@ -41,15 +34,12 @@ export default function Nav() {
         firstFocusable?.focus();
       }, 0);
     } else {
-      // Closed: return focus to hamburger button
       hamburgerRef.current?.focus();
     }
   }, [menuOpen]);
 
   return (
     <>
-      {/* Fallback for when JavaScript is disabled:
-          Show desktop links on mobile, hide hamburger button */}
       <noscript>
         <style>{`
           nav ul { display: flex !important; }
@@ -64,15 +54,13 @@ export default function Nav() {
       >
         {!menuOpen ? (
           <motion.div
-            className="pointer-events-auto max-w-7xl mx-auto flex items-center justify-between transition-all duration-300 rounded-full"
+            className="pointer-events-auto max-w-7xl mx-auto flex items-center justify-between transition-all duration-300 rounded-full border-4 border-solid"
             style={{
               backgroundColor: background,
               paddingTop: padding,
               paddingBottom: padding,
               paddingLeft: padding,
               paddingRight: padding,
-              borderWidth: '4px',
-              borderStyle: 'solid',
               borderColor: borderColor,
             }}
           >
@@ -115,7 +103,6 @@ export default function Nav() {
             ref={menuRef}
             className="fixed inset-0 flex flex-col items-center justify-center space-y-6 pointer-events-auto"
             style={{
-              // Always solid dark background when mobile menu is open
               backgroundColor: 'rgba(17,24,39,0.95)',
               paddingTop: padding,
             }}
