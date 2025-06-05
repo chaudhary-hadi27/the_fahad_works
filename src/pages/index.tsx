@@ -57,7 +57,7 @@ export default function Home() {
               Welcome to <span className="text-white">the_fahad_works</span>
             </h1>
             <p className="text-lg md:text-xl drop-shadow-2xl filter brightness-300">
-            Smart Solutions in AI, Web, Data & Design — For Your Growth
+            Empower Your Business With Tech Solutions
             </p>
           </motion.div>
         </section>
