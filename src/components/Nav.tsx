@@ -6,7 +6,6 @@ import React, {
   useEffect,
   useCallback,
   type FC,
-  type ReactNode,
   JSX,
 } from 'react';
 import Image from 'next/image';
@@ -81,11 +80,12 @@ const NavItems: FC<{ onLinkClick?: () => void }> = ({ onLinkClick }) => {
  * Covers whole viewport, centers links vertically, and traps focus.
  */
 const MobileMenu: FC<{
-  menuRef: React.RefObject<HTMLDivElement>;
+  menuRef: React.Ref<HTMLDivElement>;
   onClose: () => void;
 }> = ({ menuRef, onClose }) => {
   return (
     <motion.div
+      id="mobile-menu"
       ref={menuRef}
       tabIndex={-1}
       className="
@@ -102,6 +102,7 @@ const MobileMenu: FC<{
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
+      role="menu"
     >
       {/* Close Button */}
       <button
@@ -133,6 +134,7 @@ const MobileMenu: FC<{
             hover:underline 
             whitespace-nowrap
           "
+          role="menuitem"
         >
           {label}
         </a>
@@ -146,6 +148,8 @@ const MobileMenu: FC<{
  */
 export default function Nav(): JSX.Element {
   const [menuOpen, setMenuOpen] = useState(false);
+
+  // Use a generic Ref<HTMLDivElement> so that motion.div accepts it.
   const menuRef = useRef<HTMLDivElement>(null);
   const hamburgerRef = useRef<HTMLButtonElement>(null);
 
@@ -154,12 +158,14 @@ export default function Nav(): JSX.Element {
   /** When menuOpen changes, manage focus */
   useEffect(() => {
     if (menuOpen) {
+      // Delay slightly so that the menuRef.current actually exists in the DOM
       setTimeout(() => {
         const container = menuRef.current;
         const firstFocusable = container?.querySelector<HTMLElement>('a, button');
         firstFocusable?.focus();
       }, 0);
     } else {
+      // When closing, return focus to the hamburger
       hamburgerRef.current?.focus();
     }
   }, [menuOpen]);
@@ -174,6 +180,7 @@ export default function Nav(): JSX.Element {
       }
     };
     const handleClickOutside = (e: MouseEvent) => {
+      // If click is outside of the menu div, close
       if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
         setMenuOpen(false);
       }
