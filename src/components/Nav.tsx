@@ -1,18 +1,21 @@
 'use client';
 
-import React, {
-  useState,
-  useRef,
-  useEffect,
-  useCallback,
-  type FC,
-  JSX,
-} from 'react';
+import React, { useState, useRef, useEffect, useCallback, type FC, JSX } from 'react';
 import Image from 'next/image';
-import { useScroll, useTransform, motion, MotionValue } from 'framer-motion';
+import {
+  useScroll,
+  useTransform,
+  motion,
+  AnimatePresence,
+  MotionValue,
+} from 'framer-motion';
 
-/** List of navigation labels (and anchor IDs). */
-const NAV_ITEMS = [
+interface NavItem {
+  label: string;
+  href: string;
+}
+
+const NAV_ITEMS: NavItem[] = [
   { label: 'Home', href: '#home' },
   { label: 'Discover', href: '#discover' },
   { label: 'Services', href: '#services' },
@@ -21,166 +24,115 @@ const NAV_ITEMS = [
   { label: 'Contact', href: '#contact' },
 ];
 
-/** Custom hook: returns backgroundColor, padding, and borderColor MotionValues based on scrollY */
+// Custom scroll style hook
 function useNavScrollStyles(): {
   backgroundColor: MotionValue<string>;
   verticalPadding: MotionValue<string>;
   borderColor: MotionValue<string>;
 } {
   const { scrollY } = useScroll();
-  const backgroundColor = useTransform(
-    scrollY,
-    [0, 50],
-    ['transparent', 'rgba(17,24,39,0.95)']
-  );
+  const backgroundColor = useTransform(scrollY, [0, 10], ['transparent', 'rgba(17,24,39,0.95)']);
   const verticalPadding = useTransform(scrollY, [0, 50], ['1rem', '0.5rem']);
-  const borderColor = useTransform(
-    scrollY,
-    [0, 50],
-    ['rgba(255,255,255,0)', 'rgba(255,255,255,0.7)']
-  );
+  const borderColor = useTransform(scrollY, [0, 10], ['rgba(255,255,255,0)', 'rgba(255,255,255,0.7)']);
 
   return { backgroundColor, verticalPadding, borderColor };
 }
 
-/**
- * Renders a list of navigation links (desktop view).
- * Hidden on small screens; shown starting at `md:` breakpoint.
- */
-const NavItems: FC<{ onLinkClick?: () => void }> = ({ onLinkClick }) => {
-  return (
-    <ul className="hidden md:flex space-x-6 ml-4">
-      {NAV_ITEMS.map(({ label, href }) => (
-        <li key={label}>
-          <a
-            href={href}
-            onClick={onLinkClick}
-            className="
-              text-white 
-              font-medium 
-              px-6 
-              py-4 
-              rounded-full 
-              text-sm 
-              hover:bg-blue-400 
-              hover:text-white 
-              transition
-            "
-          >
-            {label}
-          </a>
-        </li>
-      ))}
-    </ul>
-  );
-};
+const NavItems: FC<{ onLinkClick?: () => void }> = ({ onLinkClick }) => (
+  <ul className="hidden md:flex space-x-6 ml-4">
+    {NAV_ITEMS.map(({ label, href }) => (
+      <li key={label}>
+        <a
+          href={href}
+          onClick={onLinkClick}
+          className="text-white font-extrabold uppercase tracking-wide px-6 py-4 rounded-full text-lg hover:bg-blue-500 hover:text-white transition"
+        >
+          {label}
+        </a>
+      </li>
+    ))}
+  </ul>
+);
 
-/**
- * Full-screen mobile menu that appears when hamburger is clicked.
- * Covers whole viewport, centers links vertically, and traps focus.
- */
-const MobileMenu: FC<{
-  menuRef: React.Ref<HTMLDivElement>;
-  onClose: () => void;
-}> = ({ menuRef, onClose }) => {
-  return (
+const MobileMenu: FC<{ menuRef: React.Ref<HTMLDivElement>; onClose: () => void }> = ({
+  menuRef,
+  onClose,
+}) => (
+  <AnimatePresence>
     <motion.div
       id="mobile-menu"
       ref={menuRef}
       tabIndex={-1}
-      className="
-        fixed 
-        inset-0 
-        flex 
-        flex-col 
-        items-center 
-        justify-center 
-        space-y-6 
-        bg-[rgba(17,24,39,0.95)]
-        pt-4
-      "
+      className="fixed inset-0 flex flex-col items-center justify-center space-y-6 bg-[rgba(17,24,39,0.95)] pt-4"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      role="menu"
+      transition={{ duration: 0.2 }}
     >
-      {/* Close Button */}
       <button
-        className="
-          absolute 
-          top-5 
-          right-5 
-          text-white 
-          text-4xl 
-          p-3 
-          focus:outline-none
-        "
+        className="absolute top-5 right-5 text-white text-4xl p-3 focus:outline-none"
         onClick={onClose}
         aria-label="Close menu"
       >
         &times;
       </button>
-
-      {/* Mobile Links */}
       {NAV_ITEMS.map(({ label, href }) => (
         <a
           key={label}
           href={href}
           onClick={onClose}
-          className="
-            text-white 
-            font-medium 
-            text-2xl 
-            hover:underline 
-            whitespace-nowrap
-          "
-          role="menuitem"
+          className="text-white font-medium text-2xl hover:underline whitespace-nowrap"
         >
           {label}
         </a>
       ))}
     </motion.div>
-  );
-};
+  </AnimatePresence>
+);
 
-/**
- * Main navigation component.
- */
-export default function Nav(): JSX.Element {
+const Nav: FC = (): JSX.Element => {
   const [menuOpen, setMenuOpen] = useState(false);
-
-  // Use a generic Ref<HTMLDivElement> so that motion.div accepts it.
+  const [isOverBlackSection, setIsOverBlackSection] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const hamburgerRef = useRef<HTMLButtonElement>(null);
-
   const { backgroundColor, verticalPadding, borderColor } = useNavScrollStyles();
 
-  /** When menuOpen changes, manage focus */
+  // Intersection observer to detect black section
+  useEffect(() => {
+    const target = document.querySelector('#black-section');
+    if (!target) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsOverBlackSection(entry.isIntersecting);
+      },
+      { threshold: 0.1 }
+    );
+
+    observer.observe(target);
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
   useEffect(() => {
     if (menuOpen) {
-      // Delay slightly so that the menuRef.current actually exists in the DOM
-      setTimeout(() => {
-        const container = menuRef.current;
-        const firstFocusable = container?.querySelector<HTMLElement>('a, button');
+      requestAnimationFrame(() => {
+        const firstFocusable = menuRef.current?.querySelector<HTMLElement>('a, button');
         firstFocusable?.focus();
-      }, 0);
+      });
     } else {
-      // When closing, return focus to the hamburger
       hamburgerRef.current?.focus();
     }
   }, [menuOpen]);
 
-  /** Close menu on ESC key or outside click */
   useEffect(() => {
     if (!menuOpen) return;
 
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        setMenuOpen(false);
-      }
+      if (e.key === 'Escape') setMenuOpen(false);
     };
     const handleClickOutside = (e: MouseEvent) => {
-      // If click is outside of the menu div, close
       if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
         setMenuOpen(false);
       }
@@ -211,21 +163,22 @@ export default function Nav(): JSX.Element {
           {!menuOpen ? (
             <motion.div
               tabIndex={-1}
-              className="
+              className={`
                 pointer-events-auto 
                 mx-auto 
                 flex 
                 items-center 
                 justify-between 
-                max-w-fit 
+                w-full
+                md:max-w-fit 
                 px-4 
-                gap-52 
                 transition-all 
                 duration-300 
                 rounded-full 
                 border-4 
-                border-solid
-              "
+                border-solid 
+                ${isOverBlackSection ? 'opacity-0' : 'opacity-100'}
+              `}
               style={{
                 backgroundColor,
                 paddingTop: verticalPadding,
@@ -233,8 +186,7 @@ export default function Nav(): JSX.Element {
                 borderColor,
               }}
             >
-              {/* Logo (always visible) */}
-              <div className="bg-white rounded-full p-2">
+              <div className="bg-white rounded-full p-2 drop-shadow-md md:mr-24">
                 <Image
                   src="/logo.png"
                   alt="Company Logo"
@@ -245,13 +197,11 @@ export default function Nav(): JSX.Element {
                 />
               </div>
 
-              {/* Desktop Nav Items (hidden on small screens) */}
               <NavItems />
 
-              {/* Hamburger Button (visible only on small screens) */}
               <button
                 ref={hamburgerRef}
-                className="md:hidden text-white p-3 focus:outline-none"
+                className="md:hidden text-white p-3 focus:outline-none ml-4"
                 onClick={openMenu}
                 aria-label="Open menu"
                 aria-expanded={menuOpen}
@@ -261,11 +211,12 @@ export default function Nav(): JSX.Element {
               </button>
             </motion.div>
           ) : (
-            // Full-screen overlay menu
             <MobileMenu menuRef={menuRef} onClose={closeMenu} />
           )}
         </nav>
       </header>
     </>
   );
-}
+};
+
+export default Nav;
