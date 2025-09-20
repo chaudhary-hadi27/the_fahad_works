@@ -9,13 +9,13 @@ const ContactUs = () => {
   const contactMethods = [
     {
       name: 'M. Fahad',
-      email: 'info1@thefahadworks.com',
+      email: 'fahad@thefahadworks.com',
       role: 'Lead Developer & AI Specialist',
       icon: 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z'
     },
     {
       name: 'Ch. Hadi',
-      email: 'chaudharyhadi27@gmail.com',
+      email: 'hadi@thefahadworks.com',
       role: 'Full-Stack Developer & Designer',
       icon: 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z'
     }
